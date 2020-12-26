@@ -1,0 +1,689 @@
+
+NAME
+
+    ETS -- Wolfenstein: Enemy Territory Statistics
+
+AUTHOR
+
+    (c) Vladi Shabanski <cade@bis.bg> 2003
+    http://soul.datamax.bg/~cade/away/ets
+    irc.freenode.net #ets
+  
+SYNOPSIS
+
+    ets.pl
+    ets-rt.pl
+    ets-mb.pl
+    ets-sw.pl
+
+DESCRIPTION
+  
+    ETS reads Wolfenstein: Enemy Territory server logfile 
+    and produces static web site with statistics. You can
+    use it to produce several logfiles from different
+    servers as long as you keep output directory different
+    for each server/logfile.
+
+    ETS-RT tracks server console log file and maintains
+    run-time statistics (both in-game and web stats). It
+    acts also as in-game bot and can perform various
+    rcon commands.
+
+    ETS-MB (master browser) gathers global statistics for all running servers.
+    Most important information is popularity (player loads, maps, etc.).
+
+    ETS-SW (servers watch) gathers online info from running servers.
+
+    All tools described here require Perl (see REFERENCES below)
+
+INSTALL
+
+    Actually there is no real install procedure. There are 
+    just few steps you should follow:
+    
+    1. extract ets-nnnnnn.tar.gz package
+       copy ets.pl ets-rt.pl and ets_lib (directory!) to the
+       location where you will run ETS from.
+       
+    1a. check ets_lib/html_inc dir if you want to edit html templates. 
+       
+    2. create file with environment config you need
+       (see ENVIRONMENT CONFIG section in this document)
+    
+    3. create web-visible directory and copy recursively content of `themes'
+       directory into it (not the themes-folder itself!).
+    
+    4a. start ets.pl without any arguments, i.e. something like:
+    
+       ets.pl
+       
+    That's all, usually ETS should be attached to crontab jobs but
+    you can also run it manually.
+    
+    4b. if you are using environment config described below, you should do
+        something like:
+        
+        # UNIX/bash:
+        . ets_config
+        ets.pl
+        
+        # DOS/Windows:
+        ets_config.bat
+        ets.pl
+
+    5. if you want to use ets-rt.pl you have to create environment config
+       (see ETS-RT ENVIRONMENT CONFIG section in this document)
+       and then run 'ets-rt.pl' script. (note that ets-rt.pl will not exit
+       as ets.pl but will continue to work until you stop it!)
+       
+    6. if you use ETS-RT for online web stats, you need to copy some screenshots
+       from the game to `$OUTPUT_DIR/screenshots'. screenshots are the same
+       that ET produces when you hit the screenshot key.
+
+       ets package has some screenshots ready for this including special
+       'no-screenshot.jpg' file which is shown when no screen is found for
+       the current map. more screenshots can be found here:
+       
+            http://cade.datamax.bg/away/ets/ets-rt-screenshots-dir/
+       
+       NOTE: screenshots on the web page are limited to 400x300 pixels, so you
+       better shrink your screens before put them on the web, so they will be
+       smaller for users to download!
+       
+       More screenshots sized 400x300 with fixed gamma can be found here:
+       
+            http://cade.datamax.bg//away/ets/ets-rt-screenshots-dir/
+            http://play.evrocom.net/games/et/et-stats/screenshots/
+
+
+ENVIRONMENT CONFIG
+
+    ETS is configured with environment variables.
+
+    ETS_LIB=/path/to/ets_lib
+    
+        usually you don't have to set this one. ets.pl will look for it
+        at the location ets.pl is installed. however if you need to move
+        ets_lib to another location or automatic find doesn't work you'll
+        need to set ETS_LIB manually!
+
+    ETS_LOG_FILE=et_logfile
+    
+        this is source log file. this is required to be the "gamelog"
+        it should look like this:
+        
+            (note: long lines cut)
+            7:41 Item: 1 item_health
+            7:41 Kill: 5 6 15: ^2USA-^5IceMan killed DOCTOR ROCKTER by MOD_FG42
+            7:43 Kill: 3 5 43: ^-^2-=BC=-^1d3Gr3a73t killed ^2USA-^5IceMan by MO
+            7:47 Kill: 1 4 9: ^(radko killed toko by MOD_MP40
+            7:52 Item: 1 weapon_mp40
+            8:13 Kill: 5 2 15: ^2USA-^5IceMan killed ^1Lg-^2aLieNs by MOD_FG42
+            8:17 ClientUserinfoChanged: 3 n\^-^2-=BC=-^1d3Gr3a73t\t\1\c\2\r\1...
+            8:18 sayteam: ^1Lg-^2aLieNs: are we Bv
+            8:19 Kill: 1 4 9: ^(radko killed toko by MOD_MP40
+            8:21 sayteam: ^1Lg-^2aLieNs: BC
+            8:22 ClientUserinfoChanged: 7 n\^2[LUD]^1demented\t\3\c\0\r\0\m\...
+            8:22 ClientBegin: 7
+            8:26 sayteam: ^1Lg-^2aLieNs: samo za exp igrae6
+            8:31 ClientBegin: 7
+            8:43 WeaponStats: 4 0 2097240 0 0 0 2 0 2 33 0 0 0 8 56 0 0 ...
+            8:43 ClientDisconnect: 4
+            8:53 Kill: 0 2 10: Go6ko killed ^1Lg-^2aLieNs by MOD_THOMPSON
+            8:53 Kill: 7 6 10: ^2[LUD]^1demented killed DOCTOR ROCKTER by MOD_TH
+            8:58 ClientUserinfoChanged: 5 n\^2USA-^5IceMan\t\2\c\4\r\1\m\...
+            9:00 Kill: 3 5 43: ^-^2-=BC=-^1d3Gr3a73t killed ^2USA-^5IceMan by MO
+            9:00 ClientConnect: 4   
+            9:00 Kill: 1 7 9: ^(radko killed ^2[LUD]^1demented by MOD_MP40
+            9:01 Item: 1 item_health
+            9:01 Item: 1 item_health
+
+        NOTE: this is mandatory for ETS!
+        
+        to enable this log you need this option set in your server:
+        
+            g_log "games.log"
+
+    ETS_CON_FILE=et_console_logfile
+    
+        this is source console log file. this is the "console log"
+        it should look like this:
+        
+            (note: long lines cut)
+            ^3PunkBuster Server: New Connection (slot #16) 192.168.107.112:27
+            ^3PunkBuster Server: Player GUID Computed d1732c83453453452fcb3a3
+            Userinfo: \cg_etVersion\ET Pro, ET 2.56\cg_uinfo\621 0 30\g_passw
+            ClientUserinfoChanged: 15 n\^1RESIDENT ^0VALBO\t\3\c\0\r\0\m\0000
+            voice: ^2The^0X^2Files^x*^1Mulder iamcovertops ^0-^1i^x*am*^2cove
+            etpro IAC: 15 GUID [CEC5EA934534534534534534586833D4092947A0] [^1
+            saybuddy: ^yShades*^fFinish him !!!: slagam din
+            [lof](^yShades*^fFinish him !!!^7) (D,3): slagam din
+            Item: 10 item_health
+            Kill: 0 13 17: ETPlayer killed ^yShades*^fFinish him !!! by MOD_P
+            Item: 9 weapon_magicammo
+            Item: 10 item_health
+            Item: 10 item_health
+            saybuddy: ^yShades*^fFinish him !!!: ne
+            [lof](^yShades*^fFinish him !!!^7) (D,3): ne
+            Kill: 1 9 1: ^2[RIO]^1K^tOCbO killed ^h@dTa^0->^1Jason^5Din^1Alt 
+            Kill: 7 4 9: ^0Hard^7Tastic killed ^1/S.W.A.T/^2C.Solo by MOD_MP4
+            Kill: 13 1 10: ^yShades*^fFinish him !!! killed ^2[RIO]^1K^tOCbO 
+            voice: ^yShades*^fFinish him !!! Medic
+            Kill: 0 13 17: ETPlayer killed ^yShades*^fFinish him !!! by MOD_P
+            Item: 7 item_health
+            Setting Axis autospawn to West Bunker
+            Setting Allied autospawn to Allied West Beach
+            Client 35 connecting with 300 challenge ping
+            Setting Axis autospawn to Axis Main Bunker
+            Setting Allied autospawn to West Bunker
+            Item: 7 item_health
+
+        even though both logs seems the same, they hold different information!
+        
+        NOTE: this is optional for ETS but is mandatory for ETS-RT!
+
+        to enable this log you need this option set in your server:
+        
+            logfile "3"
+    
+    ETS_OUTPUT_DIR=output_dir
+    
+        directory where output files will be stored, usually this points 
+        web-visible directory
+    
+    ETS_WEB_PREFIX=web_location_prefix
+    
+        this is web-visible location prefix of ETS_OUTPUT_DIRECTORY, 
+        usually this is empty!
+        Only use this if you call the stats page from another environment e.g.
+        postnuke. Then add the calling page (see sample_config_postnuke for an
+        example) to this var (e.g. htmlloader.php or PostWrap-Module).
+        (used as href=... prefix)
+
+    ETS_WEB_DIR=web_dir
+    
+        this is web location/dir which contains themes, if you use 
+        ETS_WEB_PREFIX, you probably should make ETS_WEB_DIR absolute, 
+        otherwise it may be relative or even empty.
+        (this is used to address images and css files)
+
+    ETS_THEME=theme
+    
+        this is theme to be used (images and css styles),
+        used if no 3rd argument given to ETS, defaults to `ets-default'
+        (used to access images and css files, it is concatenated to
+        ETS_WEB_DIR during run time)
+
+    ETS_SERVER=text
+    
+        this is default `hello' message (placed on top of each page)
+
+    ETS_NAME_MAP=file
+
+        file is list with nick=nick map lines, it is used to merge several nicks
+        to one, example:
+        
+        vladi=cade
+        it_is_me=cade
+        
+        so `vladi' and `it_is_me' nicks will be considered aliases to cade
+
+    ETS_CLAN_MAP=file
+    
+        this is used to specify manually wich players belong to a clan, example:
+        
+        cade=[ETS]
+        it_is_someone=[ETS]
+        
+        now `cade' and `it_is_someone' are considered ETS clan members.
+        
+        NOTE: if ETS_CLAN_MAP is used, automatic clan recognition is off!
+
+
+    ETS_CLAN_MAP_ONLY=1
+    
+        if set to "1" or "YES" then only clan map file will be used for
+        clan recognition (no automatic).
+
+    ETS_COLOR_OVERRIDE=file
+
+        Name of file with extra mapping of colors. Used for override some
+        color for better readibility on backround. 
+        
+        Example:
+
+        7=000000
+
+        override white to black, use on white backround
+
+    ETS_TRANSLATION=file
+
+        string translation table
+
+    ETS_HEADER_FILE=file
+    ETS_FOOTER_FILE=file
+
+        User custom html header and footer file name.
+
+    ETS_LAST_DAYS=days
+    
+        This is used to cut log file entries older than `days' days. Actually
+        data before this threshold is just skipped. There is no modifications
+        to the log file.
+        
+        With this option it is possible to make stats for last day, week or
+        month.
+        
+        example:
+        
+        export ETS_LAST_DAYS=7
+        ./ets.pl
+        
+        this will make statistics for the last week
+        (last 7 days, not since last monday/sunday!)
+
+    ETS_MOTD_FILE=file
+    
+        content of this file is used as message of the day, i.e. header of 
+        the main page. this overrides default motd/welcome text.
+        
+    ETS_MOTD=text
+    
+        this text is used as message of the day (welcome note) and overrides
+        the default text and ETS_MOTD_FILE!
+        
+    ETS_MIN_PLAYERS=number
+    
+        games with less than this number of players are ignored (default 4)
+        
+    ETS_FLOOR=number
+    
+        for some statistics only ETS_FLOOR number of top rows are shown.
+        (default is 50)
+        
+    ETS_TOPS_FLOOR=number
+    
+        same as ETS_FLOOR but is used for "tops" page (default 15)
+        
+    ETS_SCORE_MIN=xp
+    
+        players who never reached this xp in single game are ignored 
+        (default 100, usually there is no reason to change this)
+
+    ETS_XPWINS_DIFF
+    
+        minimum difference for xp wins theory calculation
+        (default 20)
+
+    ETS_WINS_MINXP
+    
+        minimum xp to calculate wins
+        (default 200)
+
+ETS-RT ENVIRONMENT CONFIG
+
+    ETS-RT is configured with environment variables.
+
+    ETS_LIB=/path/to/ets_lib
+    
+        (same as in ETS)
+
+    ETS_HERE=local_ip_address
+    
+        this must be set to the local ip address of the machine where
+        ets-rt is running
+        (usually this is the same machine as ET server)
+
+        NOTE: this is mandatory, otherwise all rcon services will not work!
+        
+    ETS_CON_FILE=et_console_logfile
+    
+        (same as in ETS)
+        
+        NOTE: this is mandatory for ETS-RT!
+
+    ETS_SERVER_IP=et_server_ip:port
+    
+        this is the ET server to which rcon commands will be send
+
+    ETS_SERVER_PWD=et_server_rcon_password
+    
+        the rcon password of the ET server
+
+    ETS_SEEN_FILE=file
+    
+        this is the seen database file, it is used by the in-game command:
+        
+            ?seen playername
+            
+        ets-rt will respond with the last timestamp when 'playername' was
+        connected to this server ('playername' may be partial)
+
+    ETS_QUOTES_FILE=quotes_file.txt
+    
+        this is optional quotations file, when issued in-game command
+        
+            ?word
+            
+        and 'word' is not recognised as command and/or query then
+        this file will be searched for quote containing this 'word' and
+        it will be printed inside the server.
+        
+        this is just for fun :)
+
+    ETS_O_LOOP_TIME=loop_time_in_seconds
+    
+        this is the time that should elapse between online web statistics
+        calculations (default is 60 seconds)
+
+        NOTE: it won't be good idea to set this too low, it will just increase
+        the rcon-load on the server!
+    
+    ETS_OUTPUT_DIR=output_dir
+    
+        (same as in ETS, shoul be given only if you want online web stats)
+
+    ETS_REF_FILE=referees_table_file
+    
+        this file has this syntax:
+        
+            9f797e990234534531230bafb92ffe96(-) nick1
+            9f7912390234534534540bafb92ffe96(-) nick2
+            ...
+            
+        players which are in this list can get referee status by issuing
+        "!ref" command inside ET
+        
+        NOTE: only guids are used for now, 'nick' is only for info.
+        NOTE: this works only with ETPro (see REFERENCES section)
+
+    ETS_WEB_PREFIX=web_location_prefix
+    ETS_WEB_DIR=web_dir
+    ETS_THEME=theme
+    ETS_XPWINS_DIFF
+
+        (same as in ETS, all are optional)
+
+ETS-MB ENVIRONMENT CONFIG
+
+    ETS-MB needs only few options:
+
+    ETS_LIB=/path/to/ets_lib
+    ETS_OUTPUT_DIR=output_dir
+    ETS_FLOOR=number
+
+        same as in ETS/ETS-RT.
+
+    ETS-MB does not exchange information pages with ETS or ETS-RT, so it
+    would be best to output into separated directory.
+
+    ETS_DB_FILE=file
+    
+        this file holds stats for servers, it is mandatory that ETS_MB can
+        write this file. default name is 'ets-mb.db' in current directory.
+
+ETS-SW ENVIRONMENT CONFIG
+
+    ETS-SW needs only few options:
+
+    ETS_LIB=/path/to/ets_lib
+    ETS_OUTPUT_DIR=output_dir
+
+        same as in ETS/ETS-RT/ETS-MB.
+
+    ETS_PAGE_NAME=servers_watch
+    
+        this is the name for the output page, default one will be
+        'servers_watch.html' (note that .html is added by ETS-SW!)
+        
+    ETS_SERVERS="ip1:port ip2:port ..."
+    
+        list of IP:PORT of all server which needed to be added in this
+        page.
+        
+    If you want separated pages for different servers you need to run ETS-SW
+    with different ETS_PAGE_NAME and ETS_SERVERS!
+    
+    If you want single page with multiple servers you add several servers
+    in ETS_SERVERS as shown above (spaces separated):
+    
+        export ETS_SERVERS="217.148.190.25:27971 212.112.49.178:27961"
+        
+    ETS-SW queries servers, writes the output page and exits. It is not
+    permanently running service.
+
+    ETS_DB_FILE_SW=file
+    
+        this file holds stats for servers, it is mandatory that ETS_SW can
+        write this file. default name is 'ets-sw.db' in current directory.
+
+HTML TEMPLATES
+
+    ETS tools now use html templates. templates are html files with some
+    'special' words in. files are located inside 'ets_lib/html_inc' directory
+    or you custom one. you can use multiple custom template directories by
+    setting whitespace-separated list of directoryes to ETS_HTML_INC:
+    
+        export ETS_HTML_INC="/home/cade/ets_my /opt/ets_second"
+        
+    ETS will search all entries and will stop searching if found one. this
+    list always ends with the 'ets_lib/html_inc' directory (which is either
+    auto-located or taken from ETS_LIB which is described in the CONFIGURATION
+    section above).
+    
+    special words recognised are:
+    
+        [#NAME]
+        
+    this will be replaced with the content of 'name.html' file from the inc
+    dirs list.
+    
+        [$NAME]
+        
+    will be replaced with ETS internal variable or environment variable
+    (first found is used)
+
+
+ETS-RT FEATURES
+
+    ets-rt recognises the following commands (queries):
+    
+    ?best
+            print current best spree and other scores
+    
+    ?seen nick      
+            search for 'nick' and print when the found player connected for
+            the last time
+            
+    ?who nick
+            search for the most popular nick of this one (kind of resolving)
+            'nick' as in ?seen can be partial. resolving is done by guid.
+    
+    ?text
+            search for quote and print it (fun fun fun nothing more)
+            
+    !ref
+            if your GUID is listed inside ETS_REF_FILE (see ETS-RT CONFIG above)
+            and you use ETPro you will get referee status
+            
+    ETS-RT is still experimental, it works but is far from complete I'd
+           be glad to have your ideas how to improve it, thanks!
+
+    Demo page of what ets-rt online web stats looks like can be seen here:
+    
+            http://cade.datamax.bg/away/ets/ets-rt-online-stats-sample/
+
+    ETS-RT is stable but still has very small number of features, if you need
+    more you may try etadmin_mod:
+    
+        http://et.d1p.de/etadmin_mod/
+        
+    I believe you can safely use both (etadmin_mod and ets-rt) on one server.
+
+
+HINTS
+
+    ETS can attach events from the logfile to the real time. To achieve 
+    this ETS expects this line:
+    
+      0:00 TIME:nnnnn
+      
+    on every restart of the server. `nnnnn' is the current unix time
+    (seconds since 00:00:00 UTC, January 1, 1970).
+    
+    simple script would be:
+    
+    #!/bin/bash
+    # suppose et.log is the name of the logfile
+    echo "  0:00 TIME:`date +%s`" >> et.log
+    # or
+    perl -e 'print "  0:00 TIME:" . time() . "\n"' >> et.log
+    etded.x86
+    etc. ...
+
+    Note that `%s' is gnu extension to date(1) command.
+
+FAQ
+
+    Q: I got this error:
+       Can't locate ets.pm in @INC ...
+       What's wrong?
+    A: ETS cannot find 'ets_lib' directory. Usually all ETS tools will
+       search for it at the location where executable files are located.
+       If for some reasons it still cannot be found you can try to use
+       ETS_LIB (see CONFIGURATION section above)
+
+    Q: What are `Ally' and `Axis' on the `last games' page?
+    A: Those are shorts for `Allies XP' and `Axis XP'. This is final
+       summary results reported by the game. Those XP points are not
+       always equal to the sum of all players' xp in the game.
+
+    Q: What is `TLH' on the `last games' page?
+    A: `TLH' is short for `Time limit hit'. With this info you can figure
+       who won the map if you know the map.
+       
+    Q: What is 'XP Wins Theory' on the `maps' page?
+    A: This shows in percents games won by the team with more XP
+       when the difference in teams XP is more than 20%
+       i.e. this is probability for this statement to be true:
+       'If the difference between the teams XP is more than 20%, 
+        then the winner is the team with more XP.'
+
+    Q: Why I have broken game timestamps with ETPro?
+    A: ETPro has (a bit useless IMO) feature to log 'realtime' instead of
+       server uptime as the original ET (well, quake). To fix this you have 
+       to disable 'realtime' with this ETPro option:
+       
+       b_logrealtimestamps 0
+       
+       (default is 1)
+       
+       Please note: ETPro is great ET mod and I prefer to play on 
+       ETPro-enabled servers! Here is the official home page:
+       
+       http://bani.anime.net/etpro/
+       
+    Q: Why my screenshots at the online stats page are so dark?
+    A: ET uses different gamma settings. Usually you need to rise the gamma
+       of your screenshots to display on web pages. I usually set gamma to 2
+       but anything higher than 1.5 should be fine.
+       (hint: search for 'levels'/'gamma' menu in you image manipulation prog)
+
+NOTES
+
+    ETS overwrites all files in the destination directory every time.
+    Usually this means that all files will be overwritten with the same
+    content and new files will appear as the logfile grows.
+    
+    For this reason you may wish to cleanup (rm output-www-dir/*.html)
+    on regular basis or if logfile is reset.
+
+DEMOS
+
+    ETS and ETS-RT:
+
+        http://cade.datamax.bg/away/ets/sample/
+
+    ETS-MB live site:
+
+        http://cade.datamax.bg/away/ets/mb/
+
+SITES
+
+    There are few sites wich you can check to see what ETS looks like.
+    
+    my demo site: (I use smal portion of real log file)
+    
+    http://soul.datamax.bg/~cade/away/ets/sample/
+
+    and real ones:    
+
+    evrocom.net:
+    
+    http://play.evrocom.net/games/et/et-stats/
+    http://play.evrocom.net/games/et/et-stats/clan/
+    
+    happypenguin.org:
+    
+    http://www.petersdtp.net/~gameserver/etstats.html
+
+    TJW:
+
+    http://et.tjw.org/
+
+    tjw site has various docs about dedicated et server setup and more...
+
+    http://www.monkeymayhem.net/et/pubstats/
+    http://austria159.server4free.de/etstats/
+    http://wolf.dehn.net/ets/
+    http://sola.united-server.net/img/
+    http://et.d1p.de/
+    http://et.sntteam.org/
+    http://arena.clan-nss.com/stats/
+    http://dck-gamers.net/online.html
+    
+    To see ETS running in a PostNuke-Environment check Metzel Territory:
+    
+    http://www.metzelkueche.de/
+    
+    ETPro site:
+    
+    http://www.bloodhunters.org/etstats
+
+    Plus Clan:
+    
+    http://et.gob.nu/stats/games.html
+    (this site inspired the 'ets-red' theme)
+    
+
+FEEDBACK
+
+    You can contact author (me) with any notes you have.
+    I'm usually online on freenode irc network in #ets channel.
+    
+THANKS
+
+    id Software
+    Splash Damage
+    All players at play.evrocom.net server and it's administrator
+
+REFERENCES
+
+    Perl Programming Language
+        http://www.perl.com/
+
+    ET Pro - The Enemy Territory Competition Mod
+        http://bani.anime.net/etpro/
+
+    etadmin_mod
+        http://et.d1p.de/etadmin_mod/
+        
+SPONSORS
+
+    ETS is kindly sponsored by:
+    
+    Gameserverhost.nl
+    You can rent quality low ping servers in europe at 
+    http://www.gameserverhost.nl
+
+END

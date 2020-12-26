@@ -1,0 +1,12 @@
+BODY  { margin: 0px 0px 0px 0px; color: #000; background-color: #fff; background-image: url(../img/pattern.gif); }
+TABLE.ets { font-family: monospace; background-color: #888; white-space: pre; }
+TR.hh { border: solid 1px #aaa; background-color: #fff; font-weight: bold; }
+TR.ff { border: solid 1px #aaa; background-color: #fff; font-weight: bold; }
+TR.cc { border: solid 1px #aaa; background-color: #ccd; text-color: #aaa; }
+TR.r1 { border: solid 1px #aaa; background-color: #ccc; }
+TR.r2 { border: solid 1px #aaa; background-color: #ddd; }
+A     { font-family: monospace; color: #055; text-decoration: none; }
+A.t   { font-family: monospace; color: #055; text-decoration: none; display: block; }
+.hitext { color: #f00; font-weight: bold; }
+.name { color: #000; }
+

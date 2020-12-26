@@ -1,0 +1,151 @@
+  ETS -- Wolfenstein: Enemy Territory Statistics
+  (c) Vladi Shabanski <cade@bis.bg> 2003-2004
+  http://cade.datamax.bg/away/ets
+  
+  HISTORY
+
+  + feature added
+  - feature removed or changed
+  ! bugfix
+  % note
+
+  19.Jun.2005
+  
+    + ETS-SW (server watch) has been added. It produces page with online
+      info for remote servers (which you do not own or have direct access).
+    + Sponsor change: 
+      Thanks to play.evrocom.net and furiozo for all this time! :) (2 years)
+      Now ETS has own server kindly provided by:
+      
+            http://www.GameServerHost.nl
+            
+      Current address of ETS/LUD server is: 217.148.190.25:27971
+      and it's status can be seen here: http://cade.datamax.bg/away/ets/sw/
+
+  22.May.2005
+  
+    + game id's are now human readable time instead of unix time
+    + player references for objectives table per game
+    + fixed weapons tops accuracy ratings
+    + more crossrefs for weapons usage
+    ! integer figures equal to 0 are not show in tables (empty cells)
+    ! top ranks link in menu finaly added :/ sorry tjw
+    + top ranks table expanded with separate 'game' column
+    ! noise player links fixed
+    + frag spree duration
+  
+  02.Apr.2005
+  
+    + ETS-MB master browser and statistics has been added.
+
+  30.Nov.2004
+  
+    + top player ranks added to each user's page
+      (patch by tjw)
+
+  31.Jul.2004
+
+    ! now kills in the team are ignored.
+    ! fixed ref_file, now accepts any case guids
+    + ?who added '?who player' will show best known nick of this player
+
+  26.Jul.2004
+  
+    + ets-red theme added
+      inspired by http://et.gob.nu/stats/games.html
+      thanks! :)
+    + ets_lib added (large portion of ets.pl and ets-rt.pl cleaned up)
+    + ets_lib/html_inc added. html templates.
+
+  21.Jul.2004
+  
+    + ETS-RT real-time stats and in-game bot utility has been implemented.
+
+  07.Jul.2004
+  
+    + jerks ladder 
+      thanks tjw again :) here is his original page: http://et.tjw.org/gg_bg.php
+      I also have stolen 'jerk' term from him :)
+    + added ets-month-rotation.sh sample shell script which helps by month
+      logs/stats rotation (backup)
+      (tjw again, auto-thanks on:))  
+  
+  14.Jun.2004
+    
+    + `last games in which playeed...' list implemented for clan stats
+    ! fixed clan recognitions
+    + maps stats added: total games, allies/axis wins, xp wins theory
+      thanx to tjw for the inspiration: http://et.tjw.org/teamwins_long.php
+      :)
+  
+  27.May.2004 - orgoj007
+
+    + some h2 tags chnaged to h3 and added class ets to all header tags
+    + added class atribute to table tags
+    + if player not found in defined clan map try default mapping
+    + finalized localization and new czech localization
+    + configurable header, footer and  color overrideing
+    + cz007 theme added
+
+  05.May.2004
+  
+    + frag spree (thanks tjw)
+    + fixed transcription colors for ets-light theme
+  
+  12.Apr.2004
+  
+    + more config items (ETS_MIN_PLAYERS,ETS_FLOOR...)
+    + ETPro 3.0 fixes
+      thanx to orgoj@cz007.net
+      
+    + total K:D ratio on each player page
+      thanx to Tony J. White (http://et.tjw.org) for this patch
+
+  02.Apr.2004
+  
+    + harvest awards
+    + sniper stats
+    ! other fixups
+  
+  13.Jan.2004
+
+    + top XP per single game score rank is back ;)
+    + references for each game for every XP in the tops pages
+    + objectives scores i.e. count of captures/repairs/dynamites/diffuses
+    ! few small fixups
+
+  04.Jan.2004
+    
+    + references for last games in which every player participated
+    + which players were referees in the game transcription
+
+  30.Nov.2003
+  
+    ! fixed ets-default theme.
+    + flag captures, dynamites and repairs
+    + `no friends' awards (top team damagers)
+    + speed optimizations
+    
+  22.Nov.2003
+  
+    - ETPro log files support.
+  
+  31.Oct.2003
+  
+    - all median, average and total scores are removed! the reason is that
+      they are nonsense: if you play more--you get more score. so the only
+      reasonable info you get from total scores is which players play more
+      than others but this info can be observed in `time waste' table.
+      
+    - removed all kinds of score/skills/weapons totals (the reason is same as 
+      above)... all figures are replaced with top ones in a single game.
+    
+    + added references to games in `kills per minute' and `top scores' pages
+  
+  18.Oct.2003
+  
+    + ETS_MOTD and ETS_MOTD_FILE
+
+  history lost...
+  
+  $Id: HISTORY,v 1.5 2005/06/19 20:42:51 cade Exp $

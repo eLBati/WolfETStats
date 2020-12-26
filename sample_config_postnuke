@@ -1,0 +1,9 @@
+export ETS_LOG_FILE=/home/www-data/logs/templog/etfull.log
+export ETS_OUTPUT_DIR=/home/www-data/etstats
+export ETS_WEB_PREFIX=/postnuke/html/htmlloader.php?content=/mk/gaming/stats/et/
+export ETS_WEB_DIR=/mk/gaming/stats/et/
+export ETS_THEME=metzelkueche
+export ETS_SERVER="Metzel Territory: Game Stats"
+#export ETS_NAME_MAP=file
+#export ETS_CLAN_MAP=file
+

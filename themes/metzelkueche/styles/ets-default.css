@@ -1,0 +1,13 @@
+//BODY  { FONT-FAMILY: geneva, verdana, arial, sans-serif; margin: 0px 0px 0px 0px; color: #fff;}
+TABLE.ets { font-family: monospace; background-color: #888; white-space: pre; }
+TR.hh { border: solid 1px #aaa; background-color: #999; font-weight: bold; }
+TR.ff { border: solid 1px #aaa; background-color: #777; font-weight: bold; }
+TR.cc { border: solid 1px #aaa; background-color: #445; text-color: #aaa; }
+TR.r1 { border: solid 1px #aaa; background-color: #ddd; }
+TR.r2 { border: solid 1px #aaa; background-color: #eee; }
+TD.etstd {color: #000;}
+//A     { font-family: monospace; color: #000080; text-decoration: none; }
+//A.t   { font-family: monospace; text-decoration: none; display: block; }
+//A.hover { font-family: monospace; color: #4f0000; text-decoration: underline; }
+.hitext { color: #00f; font-weight: bold; }
+.name { color: #fff; }

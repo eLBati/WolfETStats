@@ -1,0 +1,11 @@
+BODY  { margin: 0px 0px 0px 0px; color: #fff; background-color: #111; background-image: url(../img/etback.jpg); background-repeat: no-repeat; background-position top center; background-attachment: fixed;}
+TABLE.ets { font-family: monospace; background-color: #888; white-space: pre; }
+TR.hh { border: solid 1px #aaa; background-color: #777; font-weight: bold; }
+TR.ff { border: solid 1px #aaa; background-color: #777; font-weight: bold; }
+TR.cc { border: solid 1px #aaa; background-color: #445; text-color: #aaa; }
+TR.r1 { border: solid 1px #aaa; background-color: #444; }
+TR.r2 { border: solid 1px #aaa; background-color: #555; }
+A     { font-family: monospace; color: #0ff; text-decoration: none; }
+A.t   { font-family: monospace; color: #0ff; text-decoration: none; display: block; }
+.hitext { color: #ff0; font-weight: bold; }
+.name { color: #fff; }

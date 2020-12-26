@@ -1,0 +1,4 @@
+export ETS_OUTPUT_DIR=web/mb
+export ETS_HTML_INC=ets_lib/html_inc/mb
+#export ETS_THEME=ets-light
+

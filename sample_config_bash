@@ -1,0 +1,11 @@
+export ETS_LOG_FILE=games.log
+# ETS_PB_FILE is optional, it is used to build hall of shame
+#export ETS_PB_FILE=punk-buster.log
+export ETS_OUTPUT_DIR=web
+export ETS_WEB_PREFIX=
+export ETS_WEB_DIR=
+#export ETS_THEME=ets-light
+export ETS_SERVER="This is sample log stats"
+#export ETS_NAME_MAP=file
+#export ETS_CLAN_MAP=file
+

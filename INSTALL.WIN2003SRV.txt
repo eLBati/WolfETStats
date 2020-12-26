@@ -1,0 +1,148 @@
+   [The original url is: http://www.klets.com/ets/etserversetup.htm]
+
+   ENEMY TERRITORY SERVER SETUP ON WINDOWS 2003 SERVER WITH GAME STATS ON
+   A OTHER WEB SERVER. 
+   
+   Guido G. Witte
+   guido@klets.com www.klets.com 
+   guido@forestbergen.com www.forestbergen.com
+   
+   ------------------------------------------------------------------------
+
+   This might be useful to you, to create a server with stats on Windows
+   2003 server.
+   
+   ET SERVER SETUP:
+   
+   1. install Windows 2003 server (Windows 2000 server crashes ET)
+   2. install Enemy Territory with latest updates in dir c:\et01
+   3. install ET Pro
+   4. install ActivePerl 5.8.4.810 (or latest ver.)
+   5. share dir's c:\et01\etpro (for the et01.log) and c:\et01\pb (for
+      the sv_cheat.log)
+   6. add the next line to your server.cfg:
+      
+	  set g_log "ET01.log"
+   
+   7. make a text file with line:
+   
+      print " 0:00 TIME:" . time() . "\n";
+   
+   and save it: c:\et01\fixdate.pl
+   
+   Or download the fixdate.pl [1]here (save target and RENAME IT!)
+   
+   8. make a text file with lines:
+   
+      perl fixdate.pl >> C:\ET01\ETPRO\et01.log
+      C:\ET01\ET.exe +set dedicated 2 +set net_port 27985 +exec Server.cfg
+          +set fs_game etpro +set sv_punkbuster 1
+   
+   (NOTE: second line is wrapped for readibility! it shouldn't be!)
+   and save it: c:\et01\startet01.bat
+   
+   Or download the startet01.bat [2]here
+   
+   The server is setup, and can be started with the startet01.bat file.
+   
+   To install more ET servers on your server just copy all data from
+   
+       c:\et01 to a new map: c:\et02
+   
+   Config your server.cfg with:
+       
+	   set g_log "ET02.log"
+   
+   and rename your server name in server.cfg etc. etc.
+   
+   Config startet01.bat:
+   
+       perl fixdate.pl >> C:\ET02\ETPRO\et02.log
+       C:\ET02\ET.exe +set dedicated 2 +set net_port 27986 +exec Server.cfg
+           +set fs_game etpro +set sv_punkbuster 1
+   
+   (NOTE: second line is wrapped for readibility! it shouldn't be!)
+   and save it: c:\et02\startet02.bat
+   
+   The second server is setup, and can be started with the startet02.bat
+   file.
+   
+   share dir's c:\et02\etpro (for the et02.log) and c:\et02\pb (for the
+   sv_cheat.log)
+   
+   NOTE: When you host more ET servers on one single server check your
+   CPU performance!
+   example: PIII 500 Mhz XEON can host 18 slots MAX
+   
+   ----------------------------------------------------------------------
+   STATS WEBSERVER SETUP:
+   
+   1. Install a webserver (Apache or use Windows)
+   2. Install Perl
+   3. Install ET STATS check readme file (by Vladi Shabanski) download [3]here
+   4. Make a text file with lines:
+   
+       xcopy \\IP.GAME.SERVER\etpro\et01.log c:\ /y
+       xcopy \\IP.GAME.SERVER\pb\sv_cheat.log c:\ /y
+       c:\perl\bin\ets_config.bat
+   
+   and save it: c:\ets01.bat
+   
+   Or download the ets01.bat [4]here
+   
+   5. Make a text file with lines:
+   
+       set ETS_LOG_FILE=C:\ET01.log
+       REM ETS_PB_FILE is optional, it is used to build hall of shame
+       set ETS_PB_FILE=c:\sv_cheat.log
+       REM SETS YOUR HTM DIR
+       set ETS_OUTPUT_DIR=C:\Apache2\htdocs\ets
+       set ETS_WEB_PREFIX=
+       set ETS_WEB_DIR=
+       REM export ETS_THEME=ets-light
+       set ETS_SERVER="YOUR SERVER NAME ET SERVER STATS"
+       REM export ETS_NAME_MAP=file
+       REM export ETS_CLAN_MAP=file
+       c:\perl\bin\ets.pl
+   
+   and save it: c:\perl\bin\ets_config.bat
+   
+   Or download the ets_config.bat [5]here
+   
+   Run ets01.bat to make your stats pages. (With a scheduler if you like)
+   You can upload the pages to your hosting provider with a simple bat
+   file like:
+   
+   Make a text file:
+   
+       open 123.123.123.123 (your hosting ipadress here)
+       loginname
+       password
+       cd ets/ (your dir to stats html)
+       ascii
+       mput c:\path_to_your_stats_html_files_here\*.html
+       close
+       quit
+   
+   and save it: c:\statsupload.txt
+   
+   Make a text file:
+   
+       call ftp -i -s:statsupload.txt
+   
+   and save it: c:\statsupload.bat
+   
+   Run statsupload.bat to upload your stats pages. (With a scheduler if you like)
+   
+   Good luck!
+
+References
+
+   0. http://www.klets.com/ets/etserversetup.htm
+   1. http://www.klets.com/ets/fixdate.plRENAME
+   2. http://www.klets.com/ets/startet01.bat
+   3. http://play.evrocom.net/cade/away/ets/
+   4. http://www.klets.com/ets/ets01.bat
+   5. http://www.klets.com/ets/ets_config.bat
+   
+

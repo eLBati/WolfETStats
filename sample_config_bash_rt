@@ -1,0 +1,11 @@
+# this is mandatory! must be the outgoing ip address
+export ETS_HERE=local_ip_address
+
+# this is the server ip (with optional `:port') and rcon password
+export ETS_SERVER_IP=localhost
+export ETS_SERVER_PWD=password
+
+# next are the same as in ETS config
+export ETS_CON_FILE=etconsole.log
+export ETS_OUTPUT_DIR=web
+

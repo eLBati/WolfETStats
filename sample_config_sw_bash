@@ -1,0 +1,5 @@
+export ETS_OUTPUT_DIR=web/sw
+export ETS_HTML_INC=ets_lib/html_inc/sw
+#export ETS_THEME=ets-light
+export ETS_SERVERS="217.148.190.25:27971 213.113.132.141:27962 212.112.49.178:27961"
+
